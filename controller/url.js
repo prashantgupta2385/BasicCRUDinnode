@@ -12,7 +12,8 @@ async function handleShortIdCreation(req,res){
         {
             shortId:shortId,
             redirectURL:body.url,
-            visitHistory:[]
+            visitHistory:[],
+            createdBy:req.user._id,
         }
     )
     
@@ -79,10 +80,12 @@ async function handleGetAllURL(req,res){
     return res.render("home",{allURLs:allURL})
 }
 
+
+// ye handle frontend ke liye hai kh skte hai sttaicroutes ke liye 
 async function handleGetdatabyForm(req, res) {
     try {
         const allURLs = await shorturls.find({});
-        console.log("Fetched URLs:", allURLs); // Log fetched data
+       
         return res.render("home", { urls: allURLs }); // Pass resolved data
     } catch (error) {
         console.error("Error fetching URLs:", error);

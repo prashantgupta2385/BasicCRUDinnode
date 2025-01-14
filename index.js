@@ -1,8 +1,12 @@
 const express=require("express")
-const userRouter=require("./routes")
+
 const path=require("path")
 const {connectMongoDb}=require("./connection");
-const staticRoute=require("./routes/staticRouter")
+const urlRouter=require("./routes")
+const { restrictToLoggedinUserOnly}=require("./middleware/auth")
+const staticRouter=require("./routes/staticRouter")
+const userRouter=require("./routes/user");
+const cookieParser = require("cookie-parser");
 const app=express()
 const PORT=8001
 
@@ -22,11 +26,14 @@ app.set("views",path.resolve("./views"))
 //middleware
 app.use(express.json())
 app.use(express.urlencoded({extended:false}));
+app.use(cookieParser());
+
 
 
 //routes
-app.use("/URL",userRouter);
-app.use("/",staticRoute)
+app.use("/URL",restrictToLoggedinUserOnly,urlRouter);
+app.use("/",staticRouter);
+app.use("/user",userRouter);
 
 
 app.listen(PORT,()=>{
