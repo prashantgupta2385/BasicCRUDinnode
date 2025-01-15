@@ -20,9 +20,15 @@ async function handleUserLogin(req,res){
         });
 
     }
-    const sessionId=uuidv4();
-    setUser(sessionId,user);
-    res.cookie("uid",sessionId)
+    //for session based ststefull authenttication 
+    // const sessionId=uuidv4();
+    // setUser(sessionId,user);
+    // res.cookie("uid",sessionId)
+    
+
+    // for jwt webstoken 
+    const token =setUser(user);
+    res.cookie("token",token)
     return res.redirect("/")
 }
 

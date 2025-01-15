@@ -83,6 +83,18 @@ async function handleGetAllURL(req,res){
 
 // ye handle frontend ke liye hai kh skte hai sttaicroutes ke liye 
 async function handleGetdatabyForm(req, res) {
+    // if(!req.user)return res.redirect("/login") ye phle hi check kr liya hai ndex.js me
+    try {
+        const allURLs = await shorturls.find({createdBy:req.user._id});
+       
+        return res.render("home", { urls: allURLs }); // Pass resolved data
+    } catch (error) {
+        console.error("Error fetching URLs:", error);
+        res.status(500).send("Server Error");
+    }
+}
+async function handleAdminUrl(req, res) {
+    
     try {
         const allURLs = await shorturls.find({});
        
@@ -94,6 +106,6 @@ async function handleGetdatabyForm(req, res) {
 }
 
 module.exports={
-    handleShortIdCreation,
+    handleShortIdCreation,handleAdminUrl,
     handleShortIdVisitor,handleAnalytics,handleGetdatabyForm,handleGetAllURL
 }
